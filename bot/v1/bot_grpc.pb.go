@@ -18,11 +18,17 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BotClient interface {
-	GetBalance(ctx context.Context, in *PaymentSystemCurrencyRequest, opts ...grpc.CallOption) (*BalanceResponse, error)
-	GetUserAddress(ctx context.Context, in *PaymentSystemCurrencyUserRequest, opts ...grpc.CallOption) (*GetUserAddressResponse, error)
-	GetUserBalance(ctx context.Context, in *PaymentSystemCurrencyUserRequest, opts ...grpc.CallOption) (*BalanceResponse, error)
-	GetIncomeTransaction(ctx context.Context, in *GetIncomeTransactionRequest, opts ...grpc.CallOption) (*GetIncomeTransactionResponse, error)
-	GetIncomeTransactions(ctx context.Context, in *GetIncomeTransactionsRequest, opts ...grpc.CallOption) (*GetIncomeTransactionResponse, error)
+	GetLastBlockNum(ctx context.Context, in *PaymentSystemRequest, opts ...grpc.CallOption) (*BlockNum, error)
+	GetTotalBalance(ctx context.Context, in *AccountTypeRequest, opts ...grpc.CallOption) (*BalanceResponse, error)
+	GetAsset20TotalBalance(ctx context.Context, in *Asset20AccountTypeRequest, opts ...grpc.CallOption) (*BalanceResponse, error)
+	GetAddress(ctx context.Context, in *AccountAddressRequest, opts ...grpc.CallOption) (*AddressResponse, error)
+	CheckAddressFormat(ctx context.Context, in *AddressRequest, opts ...grpc.CallOption) (*Error, error)
+	GetAccountBalance(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*BalanceResponse, error)
+	GetAsset20AccountBalance(ctx context.Context, in *Asset20AccountRequest, opts ...grpc.CallOption) (*BalanceResponse, error)
+	GetIncomeTransaction(ctx context.Context, in *IncomeTransactionRequest, opts ...grpc.CallOption) (*IncomeTransactionResponse, error)
+	GetAsset20IncomeTransaction(ctx context.Context, in *Asset20IncomeTransactionRequest, opts ...grpc.CallOption) (*IncomeTransactionResponse, error)
+	GetIncomeTransactions(ctx context.Context, in *IncomeTransactionsRequest, opts ...grpc.CallOption) (*IncomeTransactionResponse, error)
+	GetAsset20IncomeTransactions(ctx context.Context, in *Asset20IncomeTransactionsRequest, opts ...grpc.CallOption) (*IncomeTransactionResponse, error)
 }
 
 type botClient struct {
@@ -33,35 +39,71 @@ func NewBotClient(cc grpc.ClientConnInterface) BotClient {
 	return &botClient{cc}
 }
 
-func (c *botClient) GetBalance(ctx context.Context, in *PaymentSystemCurrencyRequest, opts ...grpc.CallOption) (*BalanceResponse, error) {
+func (c *botClient) GetLastBlockNum(ctx context.Context, in *PaymentSystemRequest, opts ...grpc.CallOption) (*BlockNum, error) {
+	out := new(BlockNum)
+	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetLastBlockNum", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botClient) GetTotalBalance(ctx context.Context, in *AccountTypeRequest, opts ...grpc.CallOption) (*BalanceResponse, error) {
 	out := new(BalanceResponse)
-	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetBalance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetTotalBalance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *botClient) GetUserAddress(ctx context.Context, in *PaymentSystemCurrencyUserRequest, opts ...grpc.CallOption) (*GetUserAddressResponse, error) {
-	out := new(GetUserAddressResponse)
-	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetUserAddress", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *botClient) GetUserBalance(ctx context.Context, in *PaymentSystemCurrencyUserRequest, opts ...grpc.CallOption) (*BalanceResponse, error) {
+func (c *botClient) GetAsset20TotalBalance(ctx context.Context, in *Asset20AccountTypeRequest, opts ...grpc.CallOption) (*BalanceResponse, error) {
 	out := new(BalanceResponse)
-	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetUserBalance", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetAsset20TotalBalance", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *botClient) GetIncomeTransaction(ctx context.Context, in *GetIncomeTransactionRequest, opts ...grpc.CallOption) (*GetIncomeTransactionResponse, error) {
-	out := new(GetIncomeTransactionResponse)
+func (c *botClient) GetAddress(ctx context.Context, in *AccountAddressRequest, opts ...grpc.CallOption) (*AddressResponse, error) {
+	out := new(AddressResponse)
+	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botClient) CheckAddressFormat(ctx context.Context, in *AddressRequest, opts ...grpc.CallOption) (*Error, error) {
+	out := new(Error)
+	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/CheckAddressFormat", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botClient) GetAccountBalance(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*BalanceResponse, error) {
+	out := new(BalanceResponse)
+	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetAccountBalance", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botClient) GetAsset20AccountBalance(ctx context.Context, in *Asset20AccountRequest, opts ...grpc.CallOption) (*BalanceResponse, error) {
+	out := new(BalanceResponse)
+	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetAsset20AccountBalance", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botClient) GetIncomeTransaction(ctx context.Context, in *IncomeTransactionRequest, opts ...grpc.CallOption) (*IncomeTransactionResponse, error) {
+	out := new(IncomeTransactionResponse)
 	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetIncomeTransaction", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -69,9 +111,27 @@ func (c *botClient) GetIncomeTransaction(ctx context.Context, in *GetIncomeTrans
 	return out, nil
 }
 
-func (c *botClient) GetIncomeTransactions(ctx context.Context, in *GetIncomeTransactionsRequest, opts ...grpc.CallOption) (*GetIncomeTransactionResponse, error) {
-	out := new(GetIncomeTransactionResponse)
+func (c *botClient) GetAsset20IncomeTransaction(ctx context.Context, in *Asset20IncomeTransactionRequest, opts ...grpc.CallOption) (*IncomeTransactionResponse, error) {
+	out := new(IncomeTransactionResponse)
+	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetAsset20IncomeTransaction", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botClient) GetIncomeTransactions(ctx context.Context, in *IncomeTransactionsRequest, opts ...grpc.CallOption) (*IncomeTransactionResponse, error) {
+	out := new(IncomeTransactionResponse)
 	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetIncomeTransactions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *botClient) GetAsset20IncomeTransactions(ctx context.Context, in *Asset20IncomeTransactionsRequest, opts ...grpc.CallOption) (*IncomeTransactionResponse, error) {
+	out := new(IncomeTransactionResponse)
+	err := c.cc.Invoke(ctx, "/logmesh.bot.v1.Bot/GetAsset20IncomeTransactions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -82,11 +142,17 @@ func (c *botClient) GetIncomeTransactions(ctx context.Context, in *GetIncomeTran
 // All implementations must embed UnimplementedBotServer
 // for forward compatibility
 type BotServer interface {
-	GetBalance(context.Context, *PaymentSystemCurrencyRequest) (*BalanceResponse, error)
-	GetUserAddress(context.Context, *PaymentSystemCurrencyUserRequest) (*GetUserAddressResponse, error)
-	GetUserBalance(context.Context, *PaymentSystemCurrencyUserRequest) (*BalanceResponse, error)
-	GetIncomeTransaction(context.Context, *GetIncomeTransactionRequest) (*GetIncomeTransactionResponse, error)
-	GetIncomeTransactions(context.Context, *GetIncomeTransactionsRequest) (*GetIncomeTransactionResponse, error)
+	GetLastBlockNum(context.Context, *PaymentSystemRequest) (*BlockNum, error)
+	GetTotalBalance(context.Context, *AccountTypeRequest) (*BalanceResponse, error)
+	GetAsset20TotalBalance(context.Context, *Asset20AccountTypeRequest) (*BalanceResponse, error)
+	GetAddress(context.Context, *AccountAddressRequest) (*AddressResponse, error)
+	CheckAddressFormat(context.Context, *AddressRequest) (*Error, error)
+	GetAccountBalance(context.Context, *AccountRequest) (*BalanceResponse, error)
+	GetAsset20AccountBalance(context.Context, *Asset20AccountRequest) (*BalanceResponse, error)
+	GetIncomeTransaction(context.Context, *IncomeTransactionRequest) (*IncomeTransactionResponse, error)
+	GetAsset20IncomeTransaction(context.Context, *Asset20IncomeTransactionRequest) (*IncomeTransactionResponse, error)
+	GetIncomeTransactions(context.Context, *IncomeTransactionsRequest) (*IncomeTransactionResponse, error)
+	GetAsset20IncomeTransactions(context.Context, *Asset20IncomeTransactionsRequest) (*IncomeTransactionResponse, error)
 	mustEmbedUnimplementedBotServer()
 }
 
@@ -94,20 +160,38 @@ type BotServer interface {
 type UnimplementedBotServer struct {
 }
 
-func (UnimplementedBotServer) GetBalance(context.Context, *PaymentSystemCurrencyRequest) (*BalanceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetBalance not implemented")
+func (UnimplementedBotServer) GetLastBlockNum(context.Context, *PaymentSystemRequest) (*BlockNum, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLastBlockNum not implemented")
 }
-func (UnimplementedBotServer) GetUserAddress(context.Context, *PaymentSystemCurrencyUserRequest) (*GetUserAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserAddress not implemented")
+func (UnimplementedBotServer) GetTotalBalance(context.Context, *AccountTypeRequest) (*BalanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTotalBalance not implemented")
 }
-func (UnimplementedBotServer) GetUserBalance(context.Context, *PaymentSystemCurrencyUserRequest) (*BalanceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserBalance not implemented")
+func (UnimplementedBotServer) GetAsset20TotalBalance(context.Context, *Asset20AccountTypeRequest) (*BalanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAsset20TotalBalance not implemented")
 }
-func (UnimplementedBotServer) GetIncomeTransaction(context.Context, *GetIncomeTransactionRequest) (*GetIncomeTransactionResponse, error) {
+func (UnimplementedBotServer) GetAddress(context.Context, *AccountAddressRequest) (*AddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAddress not implemented")
+}
+func (UnimplementedBotServer) CheckAddressFormat(context.Context, *AddressRequest) (*Error, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckAddressFormat not implemented")
+}
+func (UnimplementedBotServer) GetAccountBalance(context.Context, *AccountRequest) (*BalanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAccountBalance not implemented")
+}
+func (UnimplementedBotServer) GetAsset20AccountBalance(context.Context, *Asset20AccountRequest) (*BalanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAsset20AccountBalance not implemented")
+}
+func (UnimplementedBotServer) GetIncomeTransaction(context.Context, *IncomeTransactionRequest) (*IncomeTransactionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetIncomeTransaction not implemented")
 }
-func (UnimplementedBotServer) GetIncomeTransactions(context.Context, *GetIncomeTransactionsRequest) (*GetIncomeTransactionResponse, error) {
+func (UnimplementedBotServer) GetAsset20IncomeTransaction(context.Context, *Asset20IncomeTransactionRequest) (*IncomeTransactionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAsset20IncomeTransaction not implemented")
+}
+func (UnimplementedBotServer) GetIncomeTransactions(context.Context, *IncomeTransactionsRequest) (*IncomeTransactionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetIncomeTransactions not implemented")
+}
+func (UnimplementedBotServer) GetAsset20IncomeTransactions(context.Context, *Asset20IncomeTransactionsRequest) (*IncomeTransactionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAsset20IncomeTransactions not implemented")
 }
 func (UnimplementedBotServer) mustEmbedUnimplementedBotServer() {}
 
@@ -122,62 +206,134 @@ func RegisterBotServer(s grpc.ServiceRegistrar, srv BotServer) {
 	s.RegisterService(&Bot_ServiceDesc, srv)
 }
 
-func _Bot_GetBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PaymentSystemCurrencyRequest)
+func _Bot_GetLastBlockNum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PaymentSystemRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BotServer).GetBalance(ctx, in)
+		return srv.(BotServer).GetLastBlockNum(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/logmesh.bot.v1.Bot/GetBalance",
+		FullMethod: "/logmesh.bot.v1.Bot/GetLastBlockNum",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BotServer).GetBalance(ctx, req.(*PaymentSystemCurrencyRequest))
+		return srv.(BotServer).GetLastBlockNum(ctx, req.(*PaymentSystemRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Bot_GetUserAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PaymentSystemCurrencyUserRequest)
+func _Bot_GetTotalBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccountTypeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BotServer).GetUserAddress(ctx, in)
+		return srv.(BotServer).GetTotalBalance(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/logmesh.bot.v1.Bot/GetUserAddress",
+		FullMethod: "/logmesh.bot.v1.Bot/GetTotalBalance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BotServer).GetUserAddress(ctx, req.(*PaymentSystemCurrencyUserRequest))
+		return srv.(BotServer).GetTotalBalance(ctx, req.(*AccountTypeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Bot_GetUserBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PaymentSystemCurrencyUserRequest)
+func _Bot_GetAsset20TotalBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Asset20AccountTypeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BotServer).GetUserBalance(ctx, in)
+		return srv.(BotServer).GetAsset20TotalBalance(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/logmesh.bot.v1.Bot/GetUserBalance",
+		FullMethod: "/logmesh.bot.v1.Bot/GetAsset20TotalBalance",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BotServer).GetUserBalance(ctx, req.(*PaymentSystemCurrencyUserRequest))
+		return srv.(BotServer).GetAsset20TotalBalance(ctx, req.(*Asset20AccountTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Bot_GetAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccountAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotServer).GetAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/logmesh.bot.v1.Bot/GetAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotServer).GetAddress(ctx, req.(*AccountAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Bot_CheckAddressFormat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotServer).CheckAddressFormat(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/logmesh.bot.v1.Bot/CheckAddressFormat",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotServer).CheckAddressFormat(ctx, req.(*AddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Bot_GetAccountBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotServer).GetAccountBalance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/logmesh.bot.v1.Bot/GetAccountBalance",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotServer).GetAccountBalance(ctx, req.(*AccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Bot_GetAsset20AccountBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Asset20AccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotServer).GetAsset20AccountBalance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/logmesh.bot.v1.Bot/GetAsset20AccountBalance",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotServer).GetAsset20AccountBalance(ctx, req.(*Asset20AccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Bot_GetIncomeTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetIncomeTransactionRequest)
+	in := new(IncomeTransactionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -189,13 +345,31 @@ func _Bot_GetIncomeTransaction_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: "/logmesh.bot.v1.Bot/GetIncomeTransaction",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BotServer).GetIncomeTransaction(ctx, req.(*GetIncomeTransactionRequest))
+		return srv.(BotServer).GetIncomeTransaction(ctx, req.(*IncomeTransactionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Bot_GetAsset20IncomeTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Asset20IncomeTransactionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotServer).GetAsset20IncomeTransaction(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/logmesh.bot.v1.Bot/GetAsset20IncomeTransaction",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotServer).GetAsset20IncomeTransaction(ctx, req.(*Asset20IncomeTransactionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Bot_GetIncomeTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetIncomeTransactionsRequest)
+	in := new(IncomeTransactionsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -207,7 +381,25 @@ func _Bot_GetIncomeTransactions_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: "/logmesh.bot.v1.Bot/GetIncomeTransactions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BotServer).GetIncomeTransactions(ctx, req.(*GetIncomeTransactionsRequest))
+		return srv.(BotServer).GetIncomeTransactions(ctx, req.(*IncomeTransactionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Bot_GetAsset20IncomeTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Asset20IncomeTransactionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BotServer).GetAsset20IncomeTransactions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/logmesh.bot.v1.Bot/GetAsset20IncomeTransactions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BotServer).GetAsset20IncomeTransactions(ctx, req.(*Asset20IncomeTransactionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -220,24 +412,48 @@ var Bot_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BotServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetBalance",
-			Handler:    _Bot_GetBalance_Handler,
+			MethodName: "GetLastBlockNum",
+			Handler:    _Bot_GetLastBlockNum_Handler,
 		},
 		{
-			MethodName: "GetUserAddress",
-			Handler:    _Bot_GetUserAddress_Handler,
+			MethodName: "GetTotalBalance",
+			Handler:    _Bot_GetTotalBalance_Handler,
 		},
 		{
-			MethodName: "GetUserBalance",
-			Handler:    _Bot_GetUserBalance_Handler,
+			MethodName: "GetAsset20TotalBalance",
+			Handler:    _Bot_GetAsset20TotalBalance_Handler,
+		},
+		{
+			MethodName: "GetAddress",
+			Handler:    _Bot_GetAddress_Handler,
+		},
+		{
+			MethodName: "CheckAddressFormat",
+			Handler:    _Bot_CheckAddressFormat_Handler,
+		},
+		{
+			MethodName: "GetAccountBalance",
+			Handler:    _Bot_GetAccountBalance_Handler,
+		},
+		{
+			MethodName: "GetAsset20AccountBalance",
+			Handler:    _Bot_GetAsset20AccountBalance_Handler,
 		},
 		{
 			MethodName: "GetIncomeTransaction",
 			Handler:    _Bot_GetIncomeTransaction_Handler,
 		},
 		{
+			MethodName: "GetAsset20IncomeTransaction",
+			Handler:    _Bot_GetAsset20IncomeTransaction_Handler,
+		},
+		{
 			MethodName: "GetIncomeTransactions",
 			Handler:    _Bot_GetIncomeTransactions_Handler,
+		},
+		{
+			MethodName: "GetAsset20IncomeTransactions",
+			Handler:    _Bot_GetAsset20IncomeTransactions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
